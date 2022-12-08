@@ -11,8 +11,8 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get install -y --no-install-recommends gcc make
 
-RUN go get -u golang.org/x/lint/golint
-RUN go get -u golang.org/x/tools/...
+RUN go install golang.org/x/lint/golint@latest
+RUN go install golang.org/x/tools/...@latest
 RUN apt-get update && \
     apt-get -y --no-install-recommends install pre-commit
 RUN echo "deb [trusted=yes] https://repo.goreleaser.com/apt/ /" > /etc/apt/sources.list.d/goreleaser.list && \

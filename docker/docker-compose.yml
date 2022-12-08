@@ -1,0 +1,12 @@
+---
+version: "3.8"
+
+services:
+  garage:
+    restart: unless-stopped
+    image: dxflrs/amd64_garage:v0.8.0
+    volumes:
+      - ./garage.toml:/etc/garage.toml:ro
+      - ./volumes/garage/meta:/var/lib/garage/meta
+      - ./volumes/garage/data:/var/lib/garage/data
+    network_mode: host

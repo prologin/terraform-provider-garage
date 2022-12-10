@@ -8,6 +8,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+type garageProvider struct {
+	client *garage.APIClient
+	ctx    context.Context
+}
+
+func updateContext(tfCtx context.Context, p *garageProvider) context.Context {
+	return context.WithValue(tfCtx, garage.ContextAccessToken, p.ctx.Value(garage.ContextAccessToken))
+}
+
 // Provider -
 func Provider() *schema.Provider {
 	return &schema.Provider{
@@ -29,7 +38,13 @@ func Provider() *schema.Provider {
 				DefaultFunc: schema.EnvDefaultFunc("GARAGE_TOKEN", nil),
 			},
 		},
-		ResourcesMap:         map[string]*schema.Resource{},
+		ResourcesMap: map[string]*schema.Resource{
+			"garage_bucket":              resourceBucket(),
+			"garage_bucket_global_alias": resourceBucketGlobalAlias(),
+			"garage_bucket_key":          resourceBucketKey(),
+			"garage_bucket_local_alias":  resourceBucketLocalAlias(),
+			"garage_key":                 resourceKey(),
+		},
 		DataSourcesMap:       map[string]*schema.Resource{},
 		ConfigureContextFunc: providerConfigure,
 	}
@@ -60,5 +75,8 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 
 	ctx = context.WithValue(ctx, garage.ContextAccessToken, token)
 
-	return client, diags
+	return &garageProvider{
+		client: client,
+		ctx:    ctx,
+	}, diags
 }

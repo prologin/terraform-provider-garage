@@ -5,6 +5,7 @@ go 1.19
 require (
 	git.deuxfleurs.fr/garage-sdk/garage-admin-sdk-golang v0.0.0-20221113145120-d012cff7c554
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.24.1
+	github.com/thoas/go-funk v0.9.2
 )
 
 require (
